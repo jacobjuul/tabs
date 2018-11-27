@@ -1,0 +1,19 @@
+.c-tabs {
+  display: flex;
+  flex-direction: column;
+  background: lightyellow;
+
+  &__tab-buttons {
+    display: flex;
+    background: orange;
+    cursor: pointer;
+  }
+
+  &__tab-button {
+    padding: 20px;
+
+    &--active {
+      background: lightyellow;
+    }
+  }
+}
