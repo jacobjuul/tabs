@@ -1,17 +1,56 @@
 .c-tabs {
+  position: relative;
   display: flex;
   flex-direction: column;
   background: lightyellow;
   height: 100vh;
+  width: 80%;
+
+  &__tab-content {
+    padding: 20px;
+  }
 
   &__tab-buttons {
     display: flex;
     background: orange;
     cursor: pointer;
+    user-select: none;
+    overflow: scroll;
+  }
+
+  &__tab-dropdown {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: lightyellow;
+    cursor: pointer;
+
+    &-toggle {
+      position: relative;
+      padding: 20px;
+    }
+
+    &-box {
+      position: absolute;
+      top: calc(50% + 5px);
+      left: calc(50% - 250px);
+      width: 250px;
+      height: 100px;
+      background: white;
+      border-radius: 3px;
+      box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.2);
+      opacity: 1;
+    }
+
+    &-box--hidden {
+      opacity: 0;
+      display: none;
+    }
   }
 
   &__tab-button {
     padding: 20px;
+    flex: 0 0 auto;
 
     &--active {
       background: lightyellow;
