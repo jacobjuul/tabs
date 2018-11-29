@@ -1,21 +1,30 @@
 export default {
   section1: {
     LEXINO: {
-      loadingState: "loading",
+      loadingState: 'loading',
       data: [],
-      name: "LEXINO"
+      name: 'LEXINO',
+      displayName: 'Lexino'
     },
     KOMMENTARER: {
-      loadingState: "loaded",
+      loadingState: 'loaded',
       data: [],
-      name: "KOMMENTARER"
+      name: 'KOMMENTARER',
+      displayName: 'Lag kommentarer'
+    },
+    OUTSIDE: {
+      loadingState: 'loaded',
+      data: [],
+      name: 'OUTSIDE',
+      displayName: 'I am outside'
     }
   },
   section2: {
     LEXINO: {
-      loadingState: "error",
+      loadingState: 'error',
       data: [],
-      name: "LEXINO"
+      name: 'LEXINO',
+      displayName: 'Lexino'
     }
   }
-};
+}
