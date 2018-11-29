@@ -22,10 +22,17 @@ export default class Tabs extends Component {
       TABS_KOMMENTAR
     )
     this.handleTabOusideClicked = this.handleTabClick.bind(this, TABS_OUTSIDE)
-    this.dropdownRef = React.createRef()
+    this.buttonRef = React.createRef()
+    this.tabRefs = {
+      [TABS_LEXINO]: React.createRef(),
+      [TABS_KOMMENTAR]: React.createRef(),
+      [TABS_OUTSIDE]: React.createRef()
+    }
+    this.buttonsDims = undefined
   }
   componentDidMount() {
-    this.dropdownX = this.dropdownRef.current.getBoundingClientRect().x
+    this.buttonsDims = this.buttonRef.current.getBoundingClientRect()
+    console.log(this.buttonsDims.left)
   }
   renderContent = () => {
     const { normalizeBySections, activeSectionId } = this.state
@@ -52,6 +59,7 @@ export default class Tabs extends Component {
     return (
       <Fragment>
         <div
+          ref={this.tabRefs[TABS_KOMMENTAR]}
           onClick={this.handleKommentarerClicked}
           className={cx('c-tabs__tab-button', {
             'c-tabs__tab-button--active': activeTab === TABS_KOMMENTAR
@@ -60,6 +68,7 @@ export default class Tabs extends Component {
           Lag kommentarer
         </div>
         <div
+          ref={this.tabRefs[TABS_LEXINO]}
           onClick={this.handleLexinoClicked}
           className={cx('c-tabs__tab-button', {
             'c-tabs__tab-button--active': activeTab === TABS_LEXINO
@@ -67,32 +76,20 @@ export default class Tabs extends Component {
         >
           Lexino
         </div>
-        <div
-          onClick={this.handleLexinoClicked}
-          className={cx('c-tabs__tab-button', {})}
-        >
-          Lexino
+        <div onClick={() => {}} className={cx('c-tabs__tab-button', {})}>
+          disabled
+        </div>
+        <div onClick={() => {}} className={cx('c-tabs__tab-button', {})}>
+          disabled
+        </div>
+        <div onClick={() => {}} className={cx('c-tabs__tab-button', {})}>
+          disabled
+        </div>
+        <div onClick={() => {}} className={cx('c-tabs__tab-button', {})}>
+          disabled
         </div>
         <div
-          onClick={this.handleLexinoClicked}
-          className={cx('c-tabs__tab-button', {})}
-        >
-          Lexino
-        </div>
-        <div
-          onClick={this.handleLexinoClicked}
-          className={cx('c-tabs__tab-button', {})}
-        >
-          Lexino
-        </div>
-        <div
-          onClick={this.handleLexinoClicked}
-          className={cx('c-tabs__tab-button', {})}
-        >
-          Lexino
-        </div>
-        <div
-          focused
+          ref={this.tabRefs[TABS_OUTSIDE]}
           onClick={this.handleTabOusideClicked}
           className={cx('c-tabs__tab-button', 'test', {
             'c-tabs__tab-button--active': activeTab === TABS_OUTSIDE
@@ -105,12 +102,10 @@ export default class Tabs extends Component {
   }
 
   renderDropdown = () => {
-    const { normalizeBySections, activeSectionId, activeTab } = this.state
-    const tabData = normalizeBySections[activeSectionId]
+    const { activeTab } = this.state
     return (
       <Fragment>
         <div
-          ref={this.dropdownRef}
           className="c-tabs__tab-dropdown-toggle"
           onClick={this.toggleDropdown}
         >
@@ -150,8 +145,23 @@ export default class Tabs extends Component {
       </Fragment>
     )
   }
+  checkTabIsInsideBox = selectedTab => {
+    const tabDims = selectedTab.getBoundingClientRect()
+    const tabOverlapsLeft = tabDims.left < this.buttonsDims.left
+    const tabOverlapsRight = tabDims.right > this.buttonsDims.right
+
+    if (tabOverlapsLeft) {
+      this.buttonRef.current.scrollLeft -= this.buttonsDims.left - tabDims.left
+    }
+
+    if (tabOverlapsRight) {
+      this.buttonRef.current.scrollLeft +=
+        this.buttonsDims.right + tabDims.right
+    }
+  }
 
   handleTabClick = tabName => {
+    this.checkTabIsInsideBox(this.tabRefs[tabName].current)
     this.setState({ activeTab: tabName })
   }
 
@@ -168,8 +178,12 @@ export default class Tabs extends Component {
   render() {
     return (
       <div className="c-tabs" onClick={this.closeDropdown}>
-        <div className="c-tabs__tab-buttons">{this.renderTabs()}</div>
-        <div className="c-tabs__tab-dropdown">{this.renderDropdown()}</div>
+        <div className="c-tabs__header">
+          <div className="c-tabs__tab-buttons" ref={this.buttonRef}>
+            {this.renderTabs()}
+          </div>
+          <div className="c-tabs__tab-dropdown">{this.renderDropdown()}</div>
+        </div>
         <div className="c-tabs__tab-content">{this.renderContent()}</div>
       </div>
     )
